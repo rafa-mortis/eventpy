@@ -23,7 +23,6 @@ app.config["MAIL_USERNAME"] = os.getenv("MAIL_USERNAME")
 app.config["MAIL_PASSWORD"] = os.getenv("MAIL_PASSWORD")
 app.config["MAIL_DEFAULT_SENDER"] = os.getenv("MAIL_USERNAME")
 
-# Inicializar Flask-Mail
 mail = Mail(app)
 
 # Inicializar base de dados
@@ -208,20 +207,18 @@ def deslogar():
 def registro():
     """Registo de novos utilizadores com validação por email"""
     if request.method == "POST":
+        nome = request.form["nome"]
+        email = request.form["email"]
+        senha = request.form["senha"]
+        confirmar_senha = request.form["confirmar_senha"]
+        telefone = request.form.get("telefone", "") or "000000000"  # Default if empty
+        documento_identificacao = request.form.get("documento_identificacao", "") or "N/A"  # Default if empty
+
+        if senha != confirmar_senha:
+            flash("As palavras-passe não coincidem.", "danger")
+            return redirect(url_for("registro"))
+
         try:
-            nome = request.form["nome"]
-            email = request.form["email"]
-            senha = request.form["senha"]
-            confirmar_senha = request.form["confirmar_senha"]
-            telefone = request.form.get("telefone", "") or "000000000"  # Default if empty
-            documento_identificacao = request.form.get("documento_identificacao", "") or "N/A"  # Default if empty
-
-            print(f"Registration attempt: {nome}, {email}")
-
-            if senha != confirmar_senha:
-                flash("As palavras-passe não coincidem.", "danger")
-                return redirect(url_for("registro"))
-
             # Gerar token de validação
             token = gerar_token_validacao()
             
@@ -240,8 +237,6 @@ def registro():
             user.set_senha(senha)
             user.save()
             
-            print(f"User created successfully: {user.id}")
-            
             # Enviar email de validação
             if enviar_email_validacao(email, token):
                 flash("Registo efetuado! Verifique o seu email para validar a conta.", "success")
@@ -255,7 +250,6 @@ def registro():
         except IntegrityError as e:
             # Verificar se é especificamente erro de email duplicado
             error_str = str(e).lower()
-            print(f"IntegrityError caught: {e}")
             if "email" in error_str or "unique" in error_str:
                 flash("Este email já está registado. Tente outro ou recupere a conta.", "warning")
             else:
@@ -265,12 +259,12 @@ def registro():
             return redirect(url_for("registro"))
             
         except Exception as e:
-            print(f"General exception caught: {e}")
+            flash("Ocorreu um erro inesperado no registo.", "danger")
+            print(f"Erro no registro: {e}")
             print(f"Tipo de erro: {type(e).__name__}")
+            print(f"Args do erro: {e.args}")
             import traceback
             traceback.print_exc()
-            flash("Ocorreu um erro inesperado no registo.", "danger")
-            return redirect(url_for("registro"))
 
     return render_template("registro.html")
 
