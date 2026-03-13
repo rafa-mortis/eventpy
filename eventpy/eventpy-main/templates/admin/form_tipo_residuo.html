@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}{{ "Novo Tipo" if not tipo else "Editar Tipo" }} de Resíduo - Admin{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-lg-6 mx-auto">
+            <div class="card shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-plus-circle me-2"></i>
+                        {{ "Novo Tipo de Resíduo" if not tipo else "Editar Tipo de Resíduo" }}
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label for="nome" class="form-label">Nome do Tipo *</label>
+                            <input type="text" class="form-control" id="nome" name="nome" 
+                                   value="{{ tipo.nome if tipo else '' }}" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="descricao" class="form-label">Descrição *</label>
+                            <textarea class="form-control" id="descricao" name="descricao" rows="3" required>{{ tipo.descricao if tipo else '' }}</textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="icone" class="form-label">Ícone (FontAwesome) *</label>
+                            <input type="text" class="form-control" id="icone" name="icone" 
+                                   placeholder="Ex: fa-mobile, fa-laptop, fa-tv" 
+                                   value="{{ tipo.icone if tipo else '' }}" required>
+                            <small class="form-text text-muted">
+                                Use nomes de ícones do FontAwesome. 
+                                <a href="https://fontawesome.com/icons" target="_blank">Ver ícones disponíveis</a>
+                            </small>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="exemplos" class="form-label">Exemplos *</label>
+                            <textarea class="form-control" id="exemplos" name="exemplos" rows="2" 
+                                      placeholder="Ex: telemóveis, tablets, smartwatches" required>{{ tipo.exemplos if tipo else '' }}</textarea>
+                            <small class="form-text text-muted">
+                                Separe os exemplos com vírgulas.
+                            </small>
+                        </div>
+                        
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-info">
+                                <i class="fas fa-save me-2"></i>{{ "Criar Tipo" if not tipo else "Guardar Alterações" }}
+                            </button>
+                            <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Cancelar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

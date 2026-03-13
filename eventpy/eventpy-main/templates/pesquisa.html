@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block title %}Pesquisar Pontos{% endblock %}
+
+{% block extra_css %}
+<style>
+.search-section {
+    background: #28a745;
+    color: white;
+    padding: 40px 0;
+}
+.results-section {
+    padding: 40px 0;
+}
+.ponto-card {
+    background: white;
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin: 10px 0;
+    border-radius: 5px;
+}
+.ponto-card h5 {
+    color: #28a745;
+    margin-bottom: 15px;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="search-section">
+    <div class="container">
+        <h1 class="text-center">Pesquisar Pontos de Recolha</h1>
+        <p class="text-center">Encontre o ponto mais próximo de si</p>
+    </div>
+</div>
+
+<div class="results-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <h3>Filtros</h3>
+                <form method="GET" action="{{ url_for('pesquisa') }}">
+                    <div class="mb-3">
+                        <label class="form-label">Freguesia</label>
+                        <select name="freguesia" class="form-select">
+                            <option value="">Todas</option>
+                            {% for freguesia in freguesias %}
+                            <option value="{{ freguesia }}" {% if request.args.get('freguesia') == freguesia %}selected{% endif %}>
+                                {{ freguesia }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Tipo de Ponto</label>
+                        <select name="tipo_ponto" class="form-select">
+                            <option value="">Todos</option>
+                            <option value="centro_rececao" {% if request.args.get('tipo_ponto') == 'centro_rececao' %}selected{% endif %}>Centro de Receção</option>
+                            <option value="ecocentro" {% if request.args.get('tipo_ponto') == 'ecocentro' %}selected{% endif %}>Ecocentro</option>
+                            <option value="entrajuda" {% if request.args.get('tipo_ponto') == 'entrajuda' %}selected{% endif %}>Entrajuda</option>
+                            <option value="ponto_eletrao" {% if request.args.get('tipo_ponto') == 'ponto_eletrao' %}selected{% endif %}>Ponto Eletrão</option>
+                            <option value="recolha_municipal" {% if request.args.get('tipo_ponto') == 'recolha_municipal' %}selected{% endif %}>Recolha Municipal</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-success w-100">Pesquisar</button>
+                </form>
+            </div>
+            
+            <div class="col-md-8">
+                <h3>Resultados ({{ pontos.count() }} pontos)</h3>
+                
+                {% if pontos.count() > 0 %}
+                    {% for ponto in pontos %}
+                    <div class="ponto-card">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h5>{{ ponto.nome }}</h5>
+                                <p><strong>Morada:</strong> {{ ponto.morada }}</p>
+                                <p><strong>Freguesia:</strong> {{ ponto.freguesia }}</p>
+                                {% if ponto.bairro %}
+                                <p><strong>Bairro:</strong> {{ ponto.bairro }}</p>
+                                {% endif %}
+                                <p><strong>Horário:</strong> {{ ponto.horario_abertura }} - {{ ponto.horario_fecho }}</p>
+                                <p><strong>Dias:</strong> {{ ponto.dias_funcionamento }}</p>
+                                {% if ponto.telefone %}
+                                <p><strong>Telefone:</strong> {{ ponto.telefone }}</p>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <span class="badge bg-{{ 
+                                    'success' if ponto.tipo_ponto == 'centro_rececao' else
+                                    'info' if ponto.tipo_ponto == 'ecocentro' else
+                                    'secondary' 
+                                }}">
+                                    {{ ponto.get_tipo_ponto_display() }}
+                                </span>
+                                <br><br>
+                                <button class="btn btn-success btn-sm w-100" 
+                                        data-lat="{{ ponto.latitude }}" 
+                                        data-lng="{{ ponto.longitude }}"
+                                        onclick="showOnMap(this)">
+                                    📍 Ver no Mapa
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="alert alert-info">
+                        <h4>Nenhum ponto encontrado</h4>
+                        <p>Tente ajustar os filtros de pesquisa.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function showOnMap(button) {
+    var lat = button.getAttribute('data-lat');
+    var lng = button.getAttribute('data-lng');
+    window.location.href = "{{ url_for('index') }}?lat=" + lat + "&lng=" + lng;
+}
+</script>
+{% endblock %}

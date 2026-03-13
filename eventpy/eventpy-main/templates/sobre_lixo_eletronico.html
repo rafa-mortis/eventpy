@@ -1,0 +1,336 @@
+{% extends "base.html" %}
+
+{% block title %}Sobre Lixo Eletrónico - Reciclagem REEE{% endblock %}
+
+{% block extra_css %}
+<style>
+    .hero-section {
+        background: linear-gradient(135deg, #dc3545, #fd7e14);
+        color: white;
+        padding: 80px 0;
+        margin-bottom: 40px;
+    }
+    
+    .stat-card {
+        background: linear-gradient(135deg, #dc3545, #fd7e14);
+        color: white;
+        border-radius: 15px;
+        padding: 2rem;
+        text-align: center;
+        transition: transform 0.3s ease;
+    }
+    
+    .stat-card:hover {
+        transform: translateY(-10px);
+    }
+    
+    .impact-card {
+        border-left: 4px solid #dc3545;
+        transition: transform 0.3s ease;
+    }
+    
+    .impact-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+    
+    .source-link {
+        color: #dc3545;
+        text-decoration: none;
+    }
+    
+    .source-link:hover {
+        color: #fd7e14;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container text-center">
+        <h1 class="display-4 fw-bold mb-4">
+            <i class="fas fa-exclamation-triangle me-3"></i>O Problema do Lixo Eletrónico
+        </h1>
+        <p class="lead">
+            Entenda os impactos ambientais e a importância da reciclagem correta
+        </p>
+    </div>
+</section>
+
+<!-- What is E-Waste Section -->
+<div class="container mb-5">
+    <div class="row">
+        <div class="col-lg-6">
+            <h2 class="fw-bold mb-4">
+                <i class="fas fa-laptop me-2"></i>O que é Lixo Eletrónico?
+            </h2>
+            <p class="lead">
+                Lixo eletrónico, também conhecido como REEE (Resíduos de Equipamentos Elétricos e Eletrónicos), 
+                inclui todos os aparelhos que funcionam com eletricidade ou pilhas.
+            </p>
+            
+            <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-mobile-alt fa-2x text-danger me-3"></i>
+                        <div>
+                            <h6 class="mb-0">Pequenos Eletrodomésticos</h6>
+                            <small class="text-muted">Telemóveis, tablets, etc.</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-tv fa-2x text-warning me-3"></i>
+                        <div>
+                            <h6 class="mb-0">Grandes Eletrodomésticos</h6>
+                            <small class="text-muted">TVs, frigoríficos, etc.</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-laptop fa-2x text-info me-3"></i>
+                        <div>
+                            <h6 class="mb-0">Equipamentos Informáticos</h6>
+                            <small class="text-muted">Computadores, impressoras, etc.</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-battery-half fa-2x text-success me-3"></i>
+                        <div>
+                            <h6 class="mb-0">Pilhas e Baterias</h6>
+                            <small class="text-muted">Todos os tipos de baterias</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fas fa-chart-line me-2"></i>Dados Alarmantes
+                    </h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <i class="fas fa-arrow-up text-danger me-2"></i>
+                            <strong>50 milhões de toneladas</strong> de lixo eletrónico produzidas anualmente mundialmente
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-percentage text-warning me-2"></i>
+                            Apenas <strong>20%</strong> é reciclado formalmente
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-exclamation text-info me-2"></i>
+                            Previsão de <strong>74 milhões de toneladas</strong> até 2030
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-globe text-success me-2"></i>
+                            Europa gera <strong>16.2 kg</strong> per capita anualmente
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Environmental Impact Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center fw-bold mb-5">
+            <i class="fas fa-globe-americas me-2"></i>Impactos Ambientais
+        </h2>
+        
+        <div class="row g-4 mb-5">
+            <div class="col-md-4">
+                <div class="card impact-card h-100">
+                    <div class="card-body">
+                        <div class="text-center mb-3">
+                            <i class="fas fa-flask fa-3x text-danger"></i>
+                        </div>
+                        <h5 class="card-title text-center">Contaminação</h5>
+                        <p class="card-text">
+                            Substâncias tóxicas como chumbo, mercúrio e cádmio contaminam solo e água,
+                            afetando ecossistemas e cadeias alimentares.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card impact-card h-100">
+                    <div class="card-body">
+                        <div class="text-center mb-3">
+                            <i class="fas fa-smog fa-3x text-warning"></i>
+                        </div>
+                        <h5 class="card-title text-center">Poluição do Ar</h5>
+                        <p class="card-text">
+                            Queima inadequada de lixo eletrónico liberta gases tóxicos e partículas finas
+                            que afetam a qualidade do ar e saúde humana.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card impact-card h-100">
+                    <div class="card-body">
+                        <div class="text-center mb-3">
+                            <i class="fas fa-trash fa-3x text-info"></i>
+                        </div>
+                        <h5 class="card-title text-center">Aterros Sobrecarregados</h5>
+                        <p class="card-text">
+                            Lixo eletrónico ocupa espaço valioso em aterros e demora centenas de anos
+                            para decompor-se, liberando substâncias tóxicas.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Benefits Section -->
+<div class="container mb-5">
+    <h2 class="text-center fw-bold mb-5">
+        <i class="fas fa-leaf me-2"></i>Benefícios da Reciclagem
+    </h2>
+    
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="card border-success">
+                <div class="card-body">
+                    <h5 class="card-title text-success">
+                        <i class="fas fa-recycle me-2"></i>Recuperação de Materiais
+                    </h5>
+                    <ul>
+                        <li><strong>Ouro, prata, cobre:</strong> Metais valiosos podem ser recuperados</li>
+                        <li><strong>Plásticos:</strong> Podem ser reprocessados em novos produtos</li>
+                        <li><strong>Vidro:</strong> Reciclável infinitamente sem perda de qualidade</li>
+                        <li><strong>Componentes eletrónicos:</strong> Reutilização em novos equipamentos</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card border-info">
+                <div class="card-body">
+                    <h5 class="card-title text-info">
+                        <i class="fas fa-chart-line me-2"></i>Economia Circular
+                    </h5>
+                    <ul>
+                        <li><strong>Redução de extração:</strong> Menos mineração de matérias-primas</li>
+                        <li><strong>Economia de energia:</strong> Reciclar consome menos energia</li>
+                        <li><strong>Criação de empregos:</strong> Setor da reciclagem gera postos de trabalho</li>
+                        <li><strong>Inovação:</strong> Desenvolvimento de novas tecnologias</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Statistics Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center fw-bold mb-5">
+            <i class="fas fa-chart-bar me-2"></i>Dados e Estatísticas
+        </h2>
+        
+        <div class="row g-4 mb-4">
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <i class="fas fa-weight fa-3x mb-3"></i>
+                    <h3 class="fw-bold">53.6M</h3>
+                    <p>Toneladas (2023)</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <i class="fas fa-percentage fa-3x mb-3"></i>
+                    <h3 class="fw-bold">17.4%</h3>
+                    <p>Taxa de Reciclagem UE</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <i class="fas fa-coins fa-3x mb-3"></i>
+                    <h3 class="fw-bold">€57B</h3>
+                    <p>Valor de Materiais</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <i class="fas fa-users fa-3x mb-3"></i>
+                    <h3 class="fw-bold">1.3B</h3>
+                    <p>Pessoas Afetadas</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sources -->
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-link me-2"></i>Fontes Oficiais
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <a href="https://ec.europa.eu/eurostat" target="_blank" class="source-link">
+                                    <i class="fas fa-external-link-alt me-1"></i>Eurostat - Estatísticas da UE
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="https://apambiente.pt/" target="_blank" class="source-link">
+                                    <i class="fas fa-external-link-alt me-1"></i>Agência Portuguesa do Ambiente
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <a href="https://electrao.pt/" target="_blank" class="source-link">
+                                    <i class="fas fa-external-link-alt me-1"></i>Electrão Portugal
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="https://www.itu.int/en/ITU-D/Statistics/Pages/facts/default.aspx" target="_blank" class="source-link">
+                                    <i class="fas fa-external-link-alt me-1"></i>ITU - Global E-waste Monitor
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="py-5">
+    <div class="container text-center">
+        <h2 class="fw-bold mb-4">
+            <i class="fas fa-hands-helping me-2"></i>Junte-se à Solução
+        </h2>
+        <p class="lead mb-4">
+            Cada pequena ação conta. Comece hoje mesmo a reciclar corretamente os seus equipamentos eletrónicos.
+        </p>
+        <div class="d-flex gap-3 justify-content-center">
+            <a href="{{ url_for('pesquisa') }}" class="btn btn-success btn-lg">
+                <i class="fas fa-search me-2"></i>Encontrar Ponto de Recolha
+            </a>
+            <a href="{{ url_for('tipos_residuos') }}" class="btn btn-outline-success btn-lg">
+                <i class="fas fa-list me-2"></i>Conhecer os Tipos
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

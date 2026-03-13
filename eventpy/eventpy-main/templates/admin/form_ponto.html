@@ -1,0 +1,214 @@
+{% extends "base.html" %}
+
+{% block title %}Adicionar Ponto de Recolha - Admin{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-section {
+        background: linear-gradient(135deg, #17a2b8, #20c997);
+        color: white;
+        padding: 40px 0;
+        margin-bottom: 30px;
+    }
+    
+    .form-card {
+        border-left: 4px solid #17a2b8;
+        transition: transform 0.3s ease;
+    }
+    
+    .form-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+    
+    .map-preview {
+        height: 300px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin-top: 20px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="form-section">
+    <div class="container">
+        <h1 class="text-center mb-4">
+            <i class="fas fa-map-marker-alt me-2"></i>Adicionar Novo Ponto de Recolha
+        </h1>
+        
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card form-card">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-plus-circle me-2"></i>Informações do Ponto
+                        </h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <form method="POST">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="nome" class="form-label">Nome do Ponto *</label>
+                                    <input type="text" class="form-control" id="nome" name="nome" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="tipo_ponto" class="form-label">Tipo de Ponto *</label>
+                                    <select class="form-select" id="tipo_ponto" name="tipo_ponto" required>
+                                        <option value="">Selecione...</option>
+                                        <option value="centro_rececao">Centro de Receção</option>
+                                        <option value="ecocentro">Ecocentro</option>
+                                        <option value="entrajuda">Entrajuda</option>
+                                        <option value="ponto_eletrao">Ponto Eletrão</option>
+                                        <option value="recolha_municipal">Recolha Municipal</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="morada" class="form-label">Morada *</label>
+                                    <input type="text" class="form-control" id="morada" name="morada" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="freguesia" class="form-label">Freguesia *</label>
+                                    <input type="text" class="form-control" id="freguesia" name="freguesia" required>
+                                </div>
+                            </div>
+                            
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="bairro" class="form-label">Bairro</label>
+                                    <input type="text" class="form-control" id="bairro" name="bairro">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="telefone" class="form-label">Telefone</label>
+                                    <input type="text" class="form-control" id="telefone" name="telefone">
+                                </div>
+                            </div>
+                            
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email" name="email">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="website" class="form-label">Website</label>
+                                    <input type="url" class="form-control" id="website" name="website">
+                                </div>
+                            </div>
+                            
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <label for="latitude" class="form-label">Latitude *</label>
+                                    <input type="number" step="0.000001" class="form-control" id="latitude" name="latitude" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="longitude" class="form-label">Longitude *</label>
+                                    <input type="number" step="0.000001" class="form-control" id="longitude" name="longitude" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="observacoes" class="form-label">Observações</label>
+                                    <textarea class="form-control" id="observacoes" name="observacoes" rows="3"></textarea>
+                                </div>
+                            </div>
+                            
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <label for="horario_abertura" class="form-label">Horário Abertura *</label>
+                                    <input type="time" class="form-control" id="horario_abertura" name="horario_abertura" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="horario_fecho" class="form-label">Horário Fecho *</label>
+                                    <input type="time" class="form-control" id="horario_fecho" name="horario_fecho" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="dias_funcionamento" class="form-label">Dias Funcionamento *</label>
+                                    <input type="text" class="form-control" id="dias_funcionamento" name="dias_funcionamento" required placeholder="Ex: 2ª a 6ª">
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-success btn-lg w-100">
+                                        <i class="fas fa-save me-2"></i>Adicionar Ponto
+                                    </button>
+                                    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary float-end">
+                                        <i class="fas fa-arrow-left me-2"></i>Voltar
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mapa para visualização -->
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-map me-2"></i>Pré-visualização
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="map-preview" id="preview-map"></div>
+                    <small class="text-muted">
+                        <i class="fas fa-info-circle"></i> 
+                        Dica: Clique no mapa para definir a localização do ponto
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Inicializar mapa de pré-visualização
+var preview_map = L.map('preview-map').setView([38.7169, -9.1395], 13);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap'
+}).addTo(preview_map);
+
+// Ícone para o novo ponto
+var novo_ponto_marker = null;
+
+// Adicionar clique no mapa para definir coordenadas
+preview_map.on('click', function(e) {
+    var lat = e.latlng.lat;
+    var lng = e.latlng.lng;
+    
+    // Atualizar campos do formulário
+    document.getElementById('latitude').value = lat.toFixed(6);
+    document.getElementById('longitude').value = lng.toFixed(6);
+    
+    // Remover marcador anterior
+    if (novo_ponto_marker) {
+        preview_map.removeLayer(novo_ponto_marker);
+    }
+    
+    // Adicionar novo marcador
+    novo_ponto_marker = L.marker([lat, lng], {
+        icon: L.divIcon({html: '📍', className: 'custom-icon', iconSize: [20, 20]})
+    }).addTo(preview_map)
+        .bindPopup('Localização selecionada');
+    
+    // Abrir popup automaticamente
+    novo_ponto_marker.openPopup();
+});
+
+// Função para limpar mapa
+function limparMapa() {
+    if (novo_ponto_marker) {
+        preview_map.removeLayer(novo_ponto_marker);
+        novo_ponto_marker = null;
+    }
+    document.getElementById('latitude').value = '';
+    document.getElementById('longitude').value = '';
+}
+</script>
+{% endblock %}

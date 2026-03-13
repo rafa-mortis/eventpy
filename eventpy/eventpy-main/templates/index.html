@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}Reciclagem REEE Lisboa{% endblock %}
+
+{% block extra_css %}
+<style>
+.hero {
+    background: #28a745;
+    color: white;
+    padding: 60px 0;
+    text-align: center;
+}
+.map-container {
+    padding: 40px 0;
+}
+#map {
+    height: 400px;
+    width: 100%;
+    border: 1px solid #ddd;
+}
+.stats {
+    background: #f8f9fa;
+    padding: 40px 0;
+}
+.stat-box {
+    background: white;
+    padding: 20px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <div class="container">
+        <h1>Reciclagem REEE Lisboa</h1>
+        <p>Encontre pontos de recolha de resíduos eletrónicos</p>
+    </div>
+</div>
+
+<div class="stats">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="stat-box">
+                    <h3 id="total-pontos">-</h3>
+                    <p>Pontos de Recolha</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-box">
+                    <h3>24</h3>
+                    <p>Freguesias</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-box">
+                    <h3>3</h3>
+                    <p>Tipos de Pontos</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="map-container">
+    <div class="container">
+        <h2 class="text-center mb-4">Mapa de Pontos</h2>
+        <div id="map"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Inicializar mapa
+var map = L.map('map').setView([38.7169, -9.1395], 12);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap'
+}).addTo(map);
+
+// Ícones simples e limpos
+var icons = {
+    centro_rececao: L.divIcon({html: '<div style="background: #e74c3c; color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">●</div>', className: 'custom-icon', iconSize: [24, 24]}),
+    ecocentro: L.divIcon({html: '<div style="background: #3498db; color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">▲</div>', className: 'custom-icon', iconSize: [24, 24]}),
+    entrajuda: L.divIcon({html: '<div style="background: #9b59b6; color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">★</div>', className: 'custom-icon', iconSize: [24, 24]}),
+    ponto_eletrao: L.divIcon({html: '<div style="background: #2ecc71; color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">⚡</div>', className: 'custom-icon', iconSize: [24, 24]}),
+    recolha_municipal: L.divIcon({html: '<div style="background: #f39c12; color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">■</div>', className: 'custom-icon', iconSize: [24, 24]})
+};
+
+// Carregar pontos
+fetch('/api/pontos_recolha')
+    .then(response => response.json())
+    .then(pontos => {
+        console.log('Pontos carregados:', pontos.length);
+        document.getElementById('total-pontos').textContent = pontos.length;
+        
+        pontos.forEach(function(ponto, index) {
+            console.log('Adicionando ponto:', ponto.nome, ponto.latitude, ponto.longitude);
+            var marker = L.marker([ponto.latitude, ponto.longitude], {
+                icon: icons[ponto.tipo_ponto] || icons.centro_rececao
+            }).addTo(map);
+            
+            var popup = '<div><strong>' + ponto.nome + '</strong><br>' +
+                       ponto.morada + '<br>' +
+                       ponto.freguesia + '<br>' +
+                       'Horário: ' + ponto.horario_abertura + ' - ' + ponto.horario_fecho;
+            
+            marker.bindPopup(popup);
+        });
+        
+        console.log('Todos os pontos adicionados ao mapa');
+    })
+    .catch(error => console.error('Erro:', error));
+</script>
+{% endblock %}

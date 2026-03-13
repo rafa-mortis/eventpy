@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+
+{% block title %}Meu Perfil - Reciclagem REEE{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+
+    <h2 class="mb-4"><i class="fas fa-user-circle me-2"></i>Meu Perfil</h2>
+    
+    <div class="row">
+        <!-- Dados do Utilizador -->
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <i class="fas fa-user me-2"></i>Dados Pessoais
+                </div>
+                <div class="card-body">
+                    <p><strong>Nome:</strong> {{ utilizador.nome }}</p>
+                    <p><strong>Email:</strong> {{ utilizador.email }}</p>
+                    <p><strong>Telefone:</strong> {{ utilizador.telefone }}</p>
+                    <p><strong>Documento:</strong> {{ utilizador.documento_identificacao }}</p>
+                    <p><strong>Email Validado:</strong> 
+                        {% if utilizador.email_validado %}
+                            <span class="badge bg-success">Sim</span>
+                        {% else %}
+                            <span class="badge bg-warning">Não</span>
+                        {% endif %}
+                    </p>
+                    <p><strong>Membro desde:</strong> {{ utilizador.criado_em.strftime('%d/%m/%Y') }}</p>
+                    
+                    <div class="mt-3">
+                        <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editarPerfilModal">
+                            <i class="fas fa-edit me-1"></i>Editar Perfil
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Notificações -->
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <i class="fas fa-bell me-2"></i>Notificações
+                    {% if notificacoes.count() > 0 %}
+                        <span class="badge bg-light text-dark float-end">{{ notificacoes.count() }}</span>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    {% if notificacoes.count() > 0 %}
+                        {% for notificacao in notificacoes %}
+                        <div class="alert alert-info alert-dismissible fade show" role="alert">
+                            <h6 class="alert-heading">{{ notificacao.mensagem|truncate(50) }}</h6>
+                            <p class="mb-1">{{ notificacao.mensagem }}</p>
+                            <small class="text-muted">{{ notificacao.enviada_em.strftime('%d/%m/%Y %H:%M') }}</small>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            <div class="mt-2">
+                                <a href="{{ url_for('marcar_notificacao_lida', notificacao_id=notificacao.id) }}" 
+                                   class="btn btn-sm btn-outline-secondary">Marcar como lida</a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-bell-slash fa-3x text-muted mb-3"></i>
+                            <p class="text-muted">Não tem notificações novas.</p>
+                            <small class="text-muted">Será notificado quando novos pontos de recolha forem adicionados.</small>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Estatísticas do Utilizador -->
+            <div class="card shadow-sm mt-3">
+                <div class="card-header bg-primary text-white">
+                    <i class="fas fa-chart-bar me-2"></i>Minha Contribuição
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-4">
+                            <div class="p-3">
+                                <i class="fas fa-map-marker-alt fa-2x text-success mb-2"></i>
+                                <h5>0</h5>
+                                <p class="text-muted">Pontos Visitados</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-3">
+                                <i class="fas fa-recycle fa-2x text-info mb-2"></i>
+                                <h5>0 kg</h5>
+                                <p class="text-muted">Resíduos Reciclados</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-3">
+                                <i class="fas fa-leaf fa-2x text-warning mb-2"></i>
+                                <h5>0</h5>
+                                <p class="text-muted">Impacto Ambiental</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Editar Perfil -->
+<div class="modal fade" id="editarPerfilModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Editar Perfil</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="POST" action="{{ url_for('editar_conta') }}">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="nome" class="form-label">Nome</label>
+                        <input type="text" class="form-control" id="nome" name="nome" value="{{ utilizador.nome }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" value="{{ utilizador.email }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="telefone" class="form-label">Telefone</label>
+                        <input type="text" class="form-control" id="telefone" name="telefone" value="{{ utilizador.telefone }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="documento_identificacao" class="form-label">Documento de Identificação</label>
+                        <input type="text" class="form-control" id="documento_identificacao" name="documento_identificacao" value="{{ utilizador.documento_identificacao }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="senha" class="form-label">Nova Palavra-passe (deixe em branco para manter atual)</label>
+                        <input type="password" class="form-control" id="senha" name="senha">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Alterações</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Apagar Conta -->
+<div class="modal fade" id="apagarContaModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Apagar Conta</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Tem certeza que deseja apagar a sua conta? Esta ação é irreversível.</p>
+                <p class="text-danger">Todos os seus dados serão permanentemente removidos.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <form method="POST" action="{{ url_for('apagar_conta') }}" class="d-inline">
+                    <button type="submit" class="btn btn-danger">Apagar Conta</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-4">
+    <div class="text-center">
+        <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#apagarContaModal">
+            <i class="fas fa-trash me-2"></i>Apagar Conta
+        </button>
+    </div>
+</div>
+
+{% endblock %}

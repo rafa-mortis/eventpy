@@ -1,0 +1,11 @@
+# Core dependencies
+Flask==2.3.3
+Peewee==3.17.0
+python-dotenv==1.0.0
+Flask-Mail==0.9.1
+
+# Production server
+gunicorn==21.2.0
+
+# Database driver (for MySQL support)
+PyMySQL==1.1.0

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Reciclagem REEE Lisboa{% endblock %}</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- FontAwesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <style>
+        body {
+            padding-top: 60px;
+            background: #f8f9fa;
+        }
+        .navbar {
+            background: #28a745 !important;
+        }
+        .navbar-brand {
+            color: white !important;
+            font-weight: bold;
+        }
+        .nav-link {
+            color: white !important;
+        }
+        .nav-link:hover {
+            color: #ddd !important;
+        }
+        .footer {
+            background: #333;
+            color: white;
+            padding: 20px 0;
+            margin-top: 40px;
+        }
+        .custom-icon {
+            background: none;
+            border: none;
+            font-size: 20px;
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('index') }}">
+                🔄 Reciclagem REEE
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('index') }}">Início</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('pesquisa') }}">Pesquisar</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('tipos_residuos') }}">Tipos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('sobre_lixo_eletronico') }}">Sobre</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('contato') }}">Contato</a>
+                    </li>
+                    {% if g.utilizador and g.utilizador.is_admin %}
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-success btn-sm text-white ms-3" href="{{ url_for('admin_novo_ponto') }}">
+                            📍 Adicionar Ponto
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+                <ul class="navbar-nav">
+                    {% if g.utilizador %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                👤 {{ g.utilizador.nome }}
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{{ url_for('utilizador') }}">Perfil</a></li>
+                                {% if g.utilizador.is_admin %}
+                                <li><a class="dropdown-item" href="{{ url_for('admin_dashboard') }}">📊 Dashboard Admin</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('admin_novo_ponto') }}">📍 Adicionar Ponto</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('admin_novo_tipo_residuo') }}">📋 Adicionar Tipo</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{{ url_for('admin_utilizadores') }}">👥 Gestão de Utilizadores</a></li>
+                                {% endif %}
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{{ url_for('deslogar') }}">Sair</a></li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('registro') }}">Registrar</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="container mt-3">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Main Content -->
+    {% block content %}{% endblock %}
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Reciclagem REEE Lisboa</h5>
+                    <p>Plataforma para encontrar pontos de recolha de resíduos eletrónicos em Lisboa.</p>
+                </div>
+                <div class="col-md-6">
+                    <h5>Links Úteis</h5>
+                    <ul>
+                        <li><a href="https://www.valorsul.pt/" style="color: white;">Valorsul</a></li>
+                        <li><a href="https://www.entrajuda.pt/" style="color: white;">Entrajuda</a></li>
+                        <li><a href="https://ondereciclar.pt/" style="color: white;">Onde Reciclar</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr style="border-color: #555;">
+            <div class="text-center">
+                <p>&copy; 2024 Reciclagem REEE Lisboa. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

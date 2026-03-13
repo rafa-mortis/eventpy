@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+
+{% block title %}Tipos de Resíduos - Reciclagem REEE{% endblock %}
+
+{% block extra_css %}
+<style>
+    .type-card {
+        transition: transform 0.3s ease;
+        border-left: 4px solid #28a745;
+        height: 100%;
+    }
+    
+    .type-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+    
+    .icon-large {
+        font-size: 3rem;
+        color: #28a745;
+    }
+    
+    .hero-section {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+        padding: 80px 0;
+        margin-bottom: 40px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container text-center">
+        <h1 class="display-4 fw-bold mb-4">
+            <i class="fas fa-list me-3"></i>Tipos de Resíduos Eletrónicos
+        </h1>
+        <p class="lead">
+            Conheça os diferentes tipos de equipamentos elétricos e eletrónicos que podem ser reciclados
+        </p>
+    </div>
+</section>
+
+<!-- Types Section -->
+<div class="container">
+    {% if tipos|length > 0 %}
+        <div class="row g-4">
+            {% for tipo in tipos %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card type-card">
+                    <div class="card-body text-center p-4">
+                        <div class="icon-large mb-3">
+                            <i class="{{ tipo.icone }}"></i>
+                        </div>
+                        <h5 class="card-title fw-bold">{{ tipo.nome }}</h5>
+                        <p class="card-text">{{ tipo.descricao }}</p>
+                        
+                        {% if tipo.exemplos %}
+                        <div class="mt-3">
+                            <h6 class="text-muted mb-2">Exemplos:</h6>
+                            <div class="d-flex flex-wrap justify-content-center gap-2">
+                                {% set exemplos_lista = tipo.exemplos.split(',') %}
+                                {% for exemplo in exemplos_lista %}
+                                <span class="badge bg-light text-dark">{{ exemplo.strip() }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        <div class="mt-4">
+                            <a href="{{ url_for('pesquisa') }}" class="btn btn-success btn-sm">
+                                <i class="fas fa-search me-1"></i>Onde Reciclar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center py-5">
+            <i class="fas fa-exclamation-triangle fa-4x text-warning mb-3"></i>
+            <h4 class="text-muted">Nenhum tipo de resíduo registado</h4>
+            <p class="text-muted">Os tipos de resíduos serão adicionados em breve.</p>
+            <a href="{{ url_for('contato') }}" class="btn btn-success mt-3">
+                <i class="fas fa-envelope me-2"></i>Contactar Suporte
+            </a>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Information Section -->
+<section class="py-5 mt-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <h3 class="fw-bold mb-4">
+                    <i class="fas fa-info-circle me-2"></i>Por que é importante reciclar?
+                </h3>
+                <div class="mb-3">
+                    <h5><i class="fas fa-shield-alt me-2 text-success"></i>Proteção do Ambiente</h5>
+                    <p>A reciclagem evita que substâncias tóxicas contaminem o solo e a água.</p>
+                </div>
+                <div class="mb-3">
+                    <h5><i class="fas fa-recycle me-2 text-info"></i>Economia Circular</h5>
+                    <p>Materiais valiosos podem ser recuperados e reutilizados.</p>
+                </div>
+                <div class="mb-3">
+                    <h5><i class="fas fa-bolt me-2 text-warning"></i>Economia de Energia</h5>
+                    <p>Reciclar consome menos energia do que produzir novos materiais.</p>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <h3 class="fw-bold mb-4">
+                    <i class="fas fa-question-circle me-2"></i>Dúvidas Frequentes
+                </h3>
+                <div class="accordion" id="faqAccordion">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                O que são REEE?
+                            </button>
+                        </h2>
+                        <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Resíduos de Equipamentos Elétricos e Eletrónicos - todos os aparelhos que funcionam com eletricidade ou pilhas.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                Como preparar os equipamentos?
+                            </button>
+                        </h2>
+                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Remova pilhas e baterias, limpe o equipamento e, se possível, mantenha os acessórios juntos.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                É pago ou gratuito?
+                            </button>
+                        </h2>
+                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Geralmente é gratuito para equipamentos de pequeno porte. Grandes eletrodomésticos podem ter custo associado.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
