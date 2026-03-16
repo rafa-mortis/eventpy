@@ -87,15 +87,12 @@ def index():
 def api_pontos_recolha():
     """API para retornar pontos de recolha em formato JSON"""
     try:
-        # Debug: Check database connection
+        # Ensure database connection
         if db.is_closed():
-            print("Database was closed, connecting...")
             db.connect()
         
-        print("About to query PontoRecolha...")
+        # Query all active points
         pontos = PontoRecolha.select().where(PontoRecolha.ativo == True)
-        pontos_count = pontos.count()
-        print(f"Found {pontos_count} points in database")
         
         pontos_json = []
         for ponto in pontos:
@@ -117,7 +114,6 @@ def api_pontos_recolha():
                 'observacoes': ponto.observacoes
             })
         
-        print(f"Returning {len(pontos_json)} points as JSON")
         return jsonify(pontos_json)
         
     except Exception as e:
