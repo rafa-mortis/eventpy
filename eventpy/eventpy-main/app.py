@@ -92,7 +92,7 @@ def api_pontos_recolha():
             db.connect()
         
         # Query all active points
-        pontos = PontoRecolha.select().where(PontoRecolha.ativo == True)
+        pontos = list(PontoRecolha.select().where(PontoRecolha.ativo == True))
         
         pontos_json = []
         for ponto in pontos:
