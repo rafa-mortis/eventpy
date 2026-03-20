@@ -274,7 +274,7 @@ def validar_email(token):
         user.save()
         
         flash("Email validado com sucesso! Já pode iniciar sessão.", "success")
-        return redirect(url_for("login"))
+        return render_template("validacao_sucesso.html")
         
     except Utilizador.DoesNotExist:
         flash("Link de validação inválido ou expirado.", "danger")
@@ -442,6 +442,9 @@ def admin_novo_tipo_residuo():
             # Notificar todos os utilizadores sobre o novo tipo de resíduo
             notificar_utilizadores_novo_tipo_residuo(tipo)
             
+            # Notificar administrador sobre o novo tipo de resíduo
+            notificar_admin_novo_tipo_residuo(tipo)
+            
             return redirect(url_for("admin_dashboard"))
         except Exception as e:
             flash(f"Erro ao criar tipo de resíduo: {e}", "danger")
@@ -477,6 +480,9 @@ def admin_novo_ponto():
             
             # Notificar utilizadores sobre o novo ponto
             notificar_utilizadores_novo_ponto_recolha(ponto)
+            
+            # Notificar administrador sobre o novo ponto
+            notificar_admin_novo_ponto_recolha(ponto)
             
             return redirect(url_for("admin_dashboard"))
         except Exception as e:
@@ -583,6 +589,132 @@ Equipa Reciclagem REEE Lisboa
             print("Solução: Verifique configurações SMTP")
             
         return False
+
+def notificar_admin_novo_tipo_residuo(tipo):
+    """Enviar notificação por email ao administrador sobre novo tipo de resíduo"""
+    try:
+        # Verificar se notificações por email estão habilitadas
+        if not os.getenv("EMAIL_NOTIFICATIONS_ENABLED", "False").lower() == "true":
+            print("Notificações por email desabilitadas")
+            return
+        
+        admin_email = os.getenv("ADMIN_EMAIL")
+        if not admin_email or admin_email == "admin@example.com":
+            print("Email de administrador não configurado")
+            return
+        
+        # Criar mensagem de notificação
+        msg = Message(
+            'Novo Tipo de Resíduo Adicionado - Reciclagem REEE',
+            sender=app.config.get("MAIL_DEFAULT_SENDER"),
+            recipients=[admin_email]
+        )
+        
+        msg.body = f"""
+Olá Administrador,
+
+Foi adicionado um novo tipo de resíduo na plataforma:
+
+Detalhes do Tipo:
+- Nome: {tipo.nome}
+- Descrição: {tipo.descricao}
+- Ícone: {tipo.icone}
+- Exemplos: {tipo.exemplos}
+
+Por favor, verifique as informações e valide o tipo se necessário.
+
+Atenciosamente,
+Sistema Reciclagem REEE
+        """
+        
+        msg.html = f"""
+        <h2>Novo Tipo de Resíduo Adicionado</h2>
+        <h3>Detalhes do Tipo:</h3>
+        <table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse;">
+            <tr><td><strong>Nome:</strong></td><td>{tipo.nome}</td></tr>
+            <tr><td><strong>Descrição:</strong></td><td>{tipo.descricao}</td></tr>
+            <tr><td><strong>Ícone:</strong></td><td>{tipo.icone}</td></tr>
+            <tr><td><strong>Exemplos:</strong></td><td>{tipo.exemplos}</td></tr>
+        </table>
+        <p>Por favor, verifique as informações e valide o tipo se necessário.</p>
+        <p><em>Atenciosamente,<br>Sistema Reciclagem REEE</em></p>
+        """
+        
+        mail.send(msg)
+        print(f"Notificação por email enviada ao administrador sobre novo tipo: {tipo.nome}")
+        
+    except Exception as e:
+        print(f"Erro ao enviar notificação ao administrador: {e}")
+        print(f"Tipo de erro: {type(e).__name__}")
+
+def notificar_admin_novo_ponto_recolha(ponto):
+    """Enviar notificação por email ao administrador sobre novo ponto de recolha"""
+    try:
+        # Verificar se notificações por email estão habilitadas
+        if not os.getenv("EMAIL_NOTIFICATIONS_ENABLED", "False").lower() == "true":
+            print("Notificações por email desabilitadas")
+            return
+        
+        admin_email = os.getenv("ADMIN_EMAIL")
+        if not admin_email or admin_email == "admin@example.com":
+            print("Email de administrador não configurado")
+            return
+        
+        # Criar mensagem de notificação
+        msg = Message(
+            'Novo Ponto de Recolha Adicionado - Reciclagem REEE',
+            sender=app.config.get("MAIL_DEFAULT_SENDER"),
+            recipients=[admin_email]
+        )
+        
+        msg.body = f"""
+Olá Administrador,
+
+Foi adicionado um novo ponto de recolha na plataforma:
+
+Detalhes do Ponto:
+- Nome: {ponto.nome}
+- Morada: {ponto.morada}
+- Freguesia: {ponto.freguesia}
+- Bairro: {ponto.bairro}
+- Tipo: {ponto.get_tipo_ponto_display()}
+- Coordenadas: {ponto.latitude}, {ponto.longitude}
+- Horário: {ponto.horario_abertura} - {ponto.horario_fecho}
+- Dias: {ponto.dias_funcionamento}
+- Telefone: {ponto.telefone or 'N/A'}
+- Email: {ponto.email or 'N/A'}
+
+Por favor, verifique as informações e valide o ponto se necessário.
+
+Atenciosamente,
+Sistema Reciclagem REEE
+        """
+        
+        msg.html = f"""
+        <h2>Novo Ponto de Recolha Adicionado</h2>
+        <h3>Detalhes do Ponto:</h3>
+        <table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse;">
+            <tr><td><strong>Nome:</strong></td><td>{ponto.nome}</td></tr>
+            <tr><td><strong>Morada:</strong></td><td>{ponto.morada}</td></tr>
+            <tr><td><strong>Freguesia:</strong></td><td>{ponto.freguesia}</td></tr>
+            <tr><td><strong>Bairro:</strong></td><td>{ponto.bairro}</td></tr>
+            <tr><td><strong>Tipo:</strong></td><td>{ponto.get_tipo_ponto_display()}</td></tr>
+            <tr><td><strong>Coordenadas:</strong></td><td>{ponto.latitude}, {ponto.longitude}</td></tr>
+            <tr><td><strong>Horário:</strong></td><td>{ponto.horario_abertura} - {ponto.horario_fecho}</td></tr>
+            <tr><td><strong>Dias:</strong></td><td>{ponto.dias_funcionamento}</td></tr>
+            <tr><td><strong>Telefone:</strong></td><td>{ponto.telefone or 'N/A'}</td></tr>
+            <tr><td><strong>Email:</strong></td><td>{ponto.email or 'N/A'}</td></tr>
+        </table>
+        <p>Por favor, verifique as informações e valide o ponto se necessário.</p>
+        <p><em>Atenciosamente,<br>Sistema Reciclagem REEE</em></p>
+        """
+        
+        mail.send(msg)
+        print(f"Notificação por email enviada ao administrador sobre novo ponto: {ponto.nome}")
+        
+    except Exception as e:
+        print(f"Erro ao enviar notificação ao administrador: {e}")
+        print(f"Tipo de erro: {type(e).__name__}")
 
 def notificar_utilizadores_novo_ponto_recolha(ponto):
     """Notificar todos os utilizadores sobre novo ponto de recolha"""

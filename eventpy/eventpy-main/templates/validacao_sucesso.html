@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Email Validado - Reciclagem REEE{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white text-center">
+                    <h4><i class="fas fa-check-circle me-2"></i>Email Validado com Sucesso!</h4>
+                </div>
+                <div class="card-body text-center">
+                    <div class="mb-4">
+                        <i class="fas fa-envelope-check text-success" style="font-size: 4rem;"></i>
+                    </div>
+                    
+                    <h5 class="mb-3">A sua conta foi ativada com sucesso!</h5>
+                    
+                    <p class="text-muted mb-4">
+                        Agora pode iniciar sessão na plataforma e aceder a todas as funcionalidades.
+                    </p>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                        <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg">
+                            <i class="fas fa-sign-in-alt me-2"></i>Iniciar Sessão
+                        </a>
+                        <a href="{{ url_for('index') }}" class="btn btn-outline-secondary btn-lg">
+                            <i class="fas fa-home me-2"></i>Página Inicial
+                        </a>
+                    </div>
+                </div>
+                <div class="card-footer text-center text-muted">
+                    <small>
+                        Bem-vindo à plataforma Reciclagem REEE Lisboa!
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
