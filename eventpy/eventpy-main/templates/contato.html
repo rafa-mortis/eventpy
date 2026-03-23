@@ -40,6 +40,22 @@
     .btn-success:hover {
         background: linear-gradient(135deg, #218838, #1ea085);
     }
+    
+    .contact-icon {
+        width: 48px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        margin: 0 auto 1rem;
+        font-size: 1.5rem;
+    }
+    
+    .icon-email { background: #e3f2fd; color: #1976d2; }
+    .icon-phone { background: #e8f5e8; color: #388e3c; }
+    .icon-clock { background: #fff3e0; color: #f57c00; }
+    .icon-social { background: #f3e5f5; color: #7b1fa2; }
 </style>
 {% endblock %}
 
@@ -48,7 +64,7 @@
 <section class="contact-section">
     <div class="container text-center">
         <h1 class="display-4 fw-bold mb-4">
-            <i class="fas fa-envelope me-3"></i>Entre em Contacto
+            📧 Entre em Contacto
         </h1>
         <p class="lead">
             Tem dúvidas, sugestões ou precisa de ajuda? Estamos aqui para ajudar!
@@ -63,7 +79,7 @@
             <div class="card shadow-sm">
                 <div class="card-header bg-info text-white">
                     <h5 class="mb-0">
-                        <i class="fas fa-paper-plane me-2"></i>Enviar Mensagem
+                        📧 Enviar Mensagem
                     </h5>
                 </div>
                 <div class="card-body p-4">
@@ -95,7 +111,7 @@
                             </div>
                             <div class="col-12">
                                 <button type="submit" class="btn btn-success btn-lg w-100">
-                                    <i class="fas fa-paper-plane me-2"></i>Enviar Mensagem
+                                    📧 Enviar Mensagem
                                 </button>
                             </div>
                         </div>
@@ -108,8 +124,8 @@
         <div class="col-lg-4">
             <div class="card info-card mb-4">
                 <div class="card-body text-center p-4">
-                    <div class="mb-3">
-                        <i class="fas fa-envelope fa-3x text-info"></i>
+                    <div class="contact-icon icon-email">
+                        📧
                     </div>
                     <h5 class="card-title">Email</h5>
                     <p class="card-text">
@@ -122,8 +138,8 @@
             
             <div class="card info-card mb-4">
                 <div class="card-body text-center p-4">
-                    <div class="mb-3">
-                        <i class="fas fa-phone fa-3x text-success"></i>
+                    <div class="contact-icon icon-phone">
+                        📞
                     </div>
                     <h5 class="card-title">Telefone</h5>
                     <p class="card-text">
@@ -137,8 +153,8 @@
             
             <div class="card info-card mb-4">
                 <div class="card-body text-center p-4">
-                    <div class="mb-3">
-                        <i class="fas fa-clock fa-3x text-warning"></i>
+                    <div class="contact-icon icon-clock">
+                        ⏰
                     </div>
                     <h5 class="card-title">Horário</h5>
                     <p class="card-text mb-0">
@@ -158,23 +174,15 @@
             
             <div class="card info-card">
                 <div class="card-body text-center p-4">
-                    <div class="mb-3">
-                        <i class="fas fa-share-alt fa-3x text-primary"></i>
+                    <div class="contact-icon icon-social">
+                        🌐
                     </div>
                     <h5 class="card-title">Redes Sociais</h5>
                     <div class="d-flex justify-content-center gap-3">
-                        <a href="#" class="text-decoration-none">
-                            <i class="fab fa-facebook fa-2x text-primary"></i>
-                        </a>
-                        <a href="#" class="text-decoration-none">
-                            <i class="fab fa-instagram fa-2x text-danger"></i>
-                        </a>
-                        <a href="#" class="text-decoration-none">
-                            <i class="fab fa-twitter fa-2x text-info"></i>
-                        </a>
-                        <a href="#" class="text-decoration-none">
-                            <i class="fab fa-linkedin fa-2x text-primary"></i>
-                        </a>
+                        <a href="#" class="text-decoration-none fs-4">📘</a>
+                        <a href="#" class="text-decoration-none fs-4">📷</a>
+                        <a href="#" class="text-decoration-none fs-4">🐦</a>
+                        <a href="#" class="text-decoration-none fs-4">💼</a>
                     </div>
                 </div>
             </div>
@@ -186,7 +194,7 @@
 <section class="py-5 mt-5 bg-light">
     <div class="container">
         <h2 class="text-center fw-bold mb-5">
-            <i class="fas fa-question-circle me-2"></i>Perguntas Frequentes
+            ❓ Perguntas Frequentes
         </h2>
         
         <div class="row">
